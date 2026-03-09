@@ -1,0 +1,6 @@
+services:
+  gtmotive-estimate-microservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:8080"

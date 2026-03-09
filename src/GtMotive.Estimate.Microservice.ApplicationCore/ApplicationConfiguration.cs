@@ -1,0 +1,48 @@
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.CreateVehicle;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.ListAvailableVehicles;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.RentVehicle;
+using GtMotive.Estimate.Microservice.ApplicationCore.UseCases.ReturnVehicle;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+
+[assembly: CLSCompliant(false)]
+
+namespace GtMotive.Estimate.Microservice.ApplicationCore
+{
+    /// <summary>
+    /// Adds Use Cases classes.
+    /// </summary>
+    [ExcludeFromCodeCoverage]
+    public static class ApplicationConfiguration
+    {
+        /// <summary>
+        /// Adds Use Cases to the ServiceCollection.
+        /// </summary>
+        /// <param name="services">Service Collection.</param>
+        /// <returns>The modified instance.</returns>
+        public static IServiceCollection AddUseCases(this IServiceCollection services)
+        {
+            // Register MediatR handlers by scanning this assembly (use cases are the handlers).
+            services.AddMediatR(typeof(ApplicationConfiguration).GetTypeInfo().Assembly);
+
+            // Also expose IUseCase<T> as scoped, backed by the same concrete use case instances.
+            services.AddScoped<CreateVehicleUseCase>();
+            services.AddScoped<IUseCase<CreateVehicleInput>>(sp => sp.GetRequiredService<CreateVehicleUseCase>());
+
+            services.AddScoped<ListAvailableVehiclesUseCase>();
+            services.AddScoped<IUseCase<ListAvailableVehiclesInput>>(sp => sp.GetRequiredService<ListAvailableVehiclesUseCase>());
+
+            services.AddScoped<RentVehicleUseCase>();
+            services.AddScoped<IUseCase<RentVehicleInput>>(sp => sp.GetRequiredService<RentVehicleUseCase>());
+
+            services.AddScoped<ReturnVehicleUseCase>();
+            services.AddScoped<IUseCase<ReturnVehicleInput>>(sp => sp.GetRequiredService<ReturnVehicleUseCase>());
+
+            return services;
+        }
+    }
+}

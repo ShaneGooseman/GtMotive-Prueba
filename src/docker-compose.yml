@@ -1,0 +1,6 @@
+services:
+  gtmotive-estimate-microservice:
+    image: gtmotive-estimate-microservice
+    build:
+      context: ..
+      dockerfile: src/GtMotive.Estimate.Microservice.Host/Dockerfile
